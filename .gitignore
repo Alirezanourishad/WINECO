@@ -233,3 +233,8 @@ __marimo__/
 *.log
 *.pem
 *.key
+
+# Operational exports and private backups
+/LOG.csv
+/wineco_backups/
+*.zip

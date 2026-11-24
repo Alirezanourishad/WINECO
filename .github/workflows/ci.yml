@@ -1,0 +1,44 @@
+name: Code Quality Check
+
+# Trigger this pipeline on every push to the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Download a copy of your code onto the virtual runner
+    - name: Checkout repository code
+      uses: actions/checkout@v4
+
+    # 2. Set up a secure runtime environment
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    # 3. Install automated code quality checkers
+    - name: Install Linting Tools
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8==7.1.2
+
+    # 4. Analyze your digital twin Python files for syntax structural faults
+    - name: Run code analyzer
+      run: |
+        # stop the build if there are Python syntax errors or undefined names
+        flake8 inside_rasp outside_rasp cloud_rasp --count --select=E9,F63,F7,F82 --show-source --statistics
+
+    - name: Compile Python sources
+      run: python -m compileall -q inside_rasp outside_rasp cloud_rasp
+    - name: Validate shell scripts
+      run: bash -n backup.sh && bash -n cloud_rasp/start.sh
+    - name: Validate Compose configuration
+      run: |
+        cp cloud_rasp/.env.example cloud_rasp/.env
+        docker compose config --quiet

@@ -59,6 +59,36 @@ See the [architecture documentation](docs/architecture.md) for the distinction b
 | Deployment | Docker Compose, service health checks, persistent storage, restart policies and Grafana provisioning |
 | External data | Weather API integration |
 
+## Quick start — local digital twin
+
+Prerequisites: Docker Engine or Docker Desktop with Compose v2.
+
+```bash
+git clone https://github.com/Alirezanourishad/WINECO.git
+cd WINECO
+cp cloud_rasp/.env.example cloud_rasp/.env
+# Edit cloud_rasp/.env and set unique passwords and a freshly generated token.
+docker compose up -d --build
+docker compose ps
+```
+
+Start the simulated edge nodes and cloud bridge in separate terminals as documented in [deployment notes](docs/deployment.md). Grafana is served at http://localhost:3000, InfluxDB at http://localhost:8086 and the actuator dashboard at http://localhost:5050.
+
+## Repository layout
+
+```text
+WINECO/
+├── .github/workflows/          # CI checks
+├── .devcontainer/              # Development environment
+├── inside_rasp/                # Sensing and control simulation
+├── outside_rasp/               # Outdoor simulation
+├── cloud_rasp/                 # Logger, API, dashboard and provisioning
+├── docs/                       # Architecture, deployment, experimental results
+├── docker-compose.yml
+├── mosquitto.conf
+└── backup.sh
+```
+
 ## Experimental validation
 
 The prototype was evaluated in a real office environment from 26 to 29 May 2026.
@@ -96,7 +126,9 @@ Academic supervision: Prof. Fabio Dovis and Prof. Giacomo Chiesa.
 
 This independent portfolio repository documents a collaborative academic project. It is not a GitHub fork. The [original team repository](https://github.com/Marzban-io/WINECO) contains the team's implementation. Individual contributions are not itemized here because the available documentation reports team-level work.
 
-This repository currently contains documentation only. Source-code redistribution and deployment artifacts are subject to author permission and security review. The original Docker stack has not been independently executed here.
+This standalone repository includes the team's containerized digital-twin implementation, republished with team permission, and portfolio-specific documentation and configuration changes. It preserves attribution to the original authors. The source snapshot is [35212b3](https://github.com/Marzban-io/WINECO/commit/35212b3dd715b2d79b1ae590c55b82356e8f76b6). No separate open-source license is asserted.
+
+Local database state, installed third-party plugins, raw operational logs and credentials are intentionally excluded. The Compose stack is intended for local simulation; physical Raspberry Pi hardware firmware is not provided by the upstream snapshot. End-to-end execution has not yet been independently verified.
 
 ## Future work
 

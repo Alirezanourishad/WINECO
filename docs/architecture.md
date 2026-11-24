@@ -1,6 +1,6 @@
 # System architecture
 
-WINECO integrates indoor and outdoor sensing, environmental comfort evaluation, MQTT messaging, supervisory control and cloud monitoring. This document describes the academic team's implementation, not a claim that all runtime components have been published in this portfolio.
+WINECO integrates indoor and outdoor sensing, environmental comfort evaluation, MQTT messaging, supervisory control and cloud monitoring. This document describes the academic team's implementation, including the containerized digital-twin source published here.
 
 ## Logical architecture
 

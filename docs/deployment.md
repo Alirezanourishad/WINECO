@@ -1,11 +1,11 @@
 # Deployment notes
 
-These notes document the existing team simulation configuration for reference. This standalone portfolio does not currently distribute the team's source code or a runnable Compose stack.
+These notes document the existing team simulation configuration for reference. This standalone portfolio includes a reviewed copy of the team's containerized simulation configuration. Runtime startup has not yet been independently tested.
 
-## Prerequisites for an authorized local copy
+## Prerequisites
 
 - Docker Engine or Docker Desktop with Docker Compose v2.
-- The original project files, obtained with permission from their authors.
+- This repository cloned locally.
 - Fresh local credentials and a reviewed environment configuration.
 - An isolated development network.
 
@@ -13,7 +13,7 @@ The team repository uses four Compose services: `inside-broker`, `inside-rasp`, 
 
 ## Startup sequence
 
-After configuring fresh secrets and reviewing network exposure in an authorized local copy:
+Copy `cloud_rasp/.env.example` to `cloud_rasp/.env` and set unique nonempty values for the InfluxDB token and both passwords. Keep the same configuration across restarts. Then:
 
 ```bash
 docker compose up -d --build
@@ -29,9 +29,9 @@ The original configuration requires the following Python processes to be started
 | outside-rasp | outside_handling.py |
 | cloud-rasp | Unified_cloud.py |
 
-For example, from the original project directory: `docker compose exec inside-rasp python inside_handling.py`.
+For example, from the repository root: `docker compose exec inside-rasp python inside_handling.py`.
 
-## Service endpoints in the original development configuration
+## Local service endpoints
 
 | Service | Host port |
 | --- | --- |
@@ -41,7 +41,7 @@ For example, from the original project directory: `docker compose exec inside-ra
 | Flask bridge | 5000 |
 | Actuator status | 5050 |
 
-Restrict exposed ports to localhost or an appropriately protected network. Do not deploy this development configuration to the public internet.
+The portfolio Compose file binds exposed ports to 127.0.0.1. MQTT is anonymous within the isolated simulation and the Flask bridge does not implement authentication. Do not deploy this configuration publicly or use it to control real hardware without further safety and security engineering.
 
 ## Security checklist
 
@@ -53,4 +53,4 @@ Restrict exposed ports to localhost or an appropriately protected network. Do no
 
 ## Reproducibility and limitations
 
-The original stack was inspected but has not been executed for this portfolio. Hardware-dependent tests require the original setup. Automated startup, pinned dependencies, CI tests and hardened container configuration are potential follow-up improvements, not completed features.
+The source and deployment configuration have been inspected and migrated but the Docker stack has not been executed for this portfolio. Hardware-dependent tests require the original setup. Automated startup, pinned dependencies, CI tests and hardened container configuration are potential follow-up improvements, not completed features.
