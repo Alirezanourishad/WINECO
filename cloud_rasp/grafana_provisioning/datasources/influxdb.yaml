@@ -1,0 +1,27 @@
+# ══════════════════════════════════════════════════════════════════
+# Grafana datasource auto-provisioning
+#
+# Grafana reads this file on startup and creates the InfluxDB
+# datasource automatically. If you've already added it manually
+# before, Grafana keeps the manual one; this one shows up alongside.
+#
+# To force-replace any manual edits, delete ./data/grafana/grafana.db
+# and restart the cloud-rasp container.
+# ══════════════════════════════════════════════════════════════════
+
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB-WINECO
+    type: influxdb
+    access: proxy
+    url: http://localhost:8086
+    isDefault: true
+    editable: true
+    jsonData:
+      version: Flux
+      organization: ${INFLUXDB_ORG}
+      defaultBucket: ${INFLUXDB_BUCKET}
+      tlsSkipVerify: true
+    secureJsonData:
+      token: ${INFLUXDB_TOKEN}

@@ -1,0 +1,27 @@
+# ══════════════════════════════════════════════════════════════════
+# Grafana dashboard provider
+#
+# Every JSON file dropped into /etc/grafana/provisioning/dashboards
+# is loaded as a dashboard on Grafana startup. Once you build a
+# dashboard in the UI, EXPORT IT (Share → Export → Save to file)
+# and drop the JSON into:
+#
+#     cloud_rasp/grafana_provisioning/dashboards/
+#
+# Next container start, the dashboard reappears automatically —
+# even if ./data/grafana/ is empty.
+# ══════════════════════════════════════════════════════════════════
+
+apiVersion: 1
+
+providers:
+  - name: WINECO-dashboards
+    orgId: 1
+    folder: WINECO
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      foldersFromFilesStructure: false

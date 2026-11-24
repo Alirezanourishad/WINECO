@@ -1,0 +1,113 @@
+name: wineco_project
+
+# ══════════════════════════════════════════════════════════════════
+# WINECO digital twin — HARDENED PERSISTENCE VERSION
+#
+# What changed vs the original setup:
+#
+#   1. BIND MOUNTS instead of named volumes.
+#      Data now lives inside ./data/ in THIS folder.
+#      That means:
+#        - `docker compose down -v` cannot wipe it
+#        - Docker Desktop "reset to factory defaults" cannot wipe it
+#        - WSL2 reset cannot wipe it
+#        - Zipping this folder DOES back up your dashboards + data
+#
+#   2. restart: unless-stopped
+#      Containers auto-relaunch after laptop reboot, Docker restart,
+#      or container crash. They only stay down if YOU stop them.
+#
+#   3. Grafana auto-provisioning
+#      Dashboards + datasource defined as files in ./cloud_rasp/grafana_provisioning/
+#      If the ./data/grafana/ folder is empty, Grafana rebuilds itself
+#      from those files on first boot. So even total data loss is
+#      recoverable from git/zip alone.
+#
+#   4. InfluxDB auto-setup
+#      First boot: start.sh runs `influx setup` automatically using
+#      the credentials in .env. No manual UI step.
+# ══════════════════════════════════════════════════════════════════
+
+services:
+  # ──────────────────────────────────────────────────────────────
+  # 1. BROKER — Central MQTT post office (auto-starts)
+  # ──────────────────────────────────────────────────────────────
+  inside-broker:
+    image: eclipse-mosquitto:latest
+    container_name: inside_rasp_broker
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:1884:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    healthcheck:
+      test: ["CMD", "mosquitto_sub", "-t", "$$SYS/#", "-C", "1", "-p", "1883", "-i", "healthcheck"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ──────────────────────────────────────────────────────────────
+  # 2. INSIDE RASP — idle. Run manually inside the container:
+  #      python inside_handling.py
+  #      python automat_logic.py        (in a second exec session)
+  #      python Decision_algorithm.py   (in a third  exec session)
+  # ──────────────────────────────────────────────────────────────
+  inside-rasp:
+    image: python:3.11-bullseye
+    container_name: inside_rasp_sim
+    restart: unless-stopped
+    depends_on:
+      inside-broker:
+        condition: service_healthy
+    volumes:
+      - ./inside_rasp:/app
+    working_dir: /app
+    command: /bin/bash -c "pip install paho-mqtt requests && tail -f /dev/null"
+
+  # ──────────────────────────────────────────────────────────────
+  # 3. OUTSIDE RASP — idle. Run manually:
+  #      python outside_handling.py
+  # ──────────────────────────────────────────────────────────────
+  outside-rasp:
+    image: python:3.11-bullseye
+    container_name: outside_rasp_sim
+    restart: unless-stopped
+    depends_on:
+      inside-broker:
+        condition: service_healthy
+    volumes:
+      - ./outside_rasp:/app
+    working_dir: /app
+    command: /bin/bash -c "pip install paho-mqtt && tail -f /dev/null"
+
+  # ──────────────────────────────────────────────────────────────
+  # 4. CLOUD RASP — InfluxDB + Grafana + Flask bridge + Status page.
+  #    InfluxDB, Grafana and the status dashboard auto-start.
+  #    Unified_cloud.py is still manual:
+  #      docker exec -it cloud_rasp_sim /bin/bash
+  #      python Unified_cloud.py
+  # ──────────────────────────────────────────────────────────────
+  cloud-rasp:
+    build:
+      context: ./cloud_rasp
+    image: wineco/cloud-rasp:latest
+    container_name: cloud_rasp_sim
+    restart: unless-stopped
+    depends_on:
+      inside-broker:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8086:8086"   # InfluxDB UI
+      - "127.0.0.1:3000:3000"   # Grafana UI
+      - "127.0.0.1:5000:5000"   # Flask bridge (Grafana → MQTT)
+      - "127.0.0.1:5050:5050"   # Actuator status HTML dashboard
+    env_file:
+      - ./cloud_rasp/.env
+    volumes:
+      - ./cloud_rasp:/app
+      # ─── BIND MOUNTS — survive everything except deleting these folders ───
+      - ./data/influxdb:/var/lib/influxdb2
+      - ./data/grafana:/var/lib/grafana
+      # ─── Grafana provisioning (read-only) ───
+      - ./cloud_rasp/grafana_provisioning:/etc/grafana/provisioning:ro
+    working_dir: /app

@@ -1,0 +1,1163 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "uid": "wineco-main",
+  "title": "WINECO",
+  "tags": [
+    "wineco",
+    "iot",
+    "digital-twin"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "5s",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "templating": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "gauge",
+      "title": "Indoor Temp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"sensor/inside_temp\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "min": 10,
+          "max": 40,
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "green"
+              },
+              {
+                "value": 26,
+                "color": "yellow"
+              },
+              {
+                "value": 29,
+                "color": "red"
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        }
+      }
+    },
+    {
+      "id": 2,
+      "type": "gauge",
+      "title": "Outdoor Temp",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 5,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"sensor/outside_temp\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "min": -5,
+          "max": 45,
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "blue"
+              },
+              {
+                "value": 10,
+                "color": "green"
+              },
+              {
+                "value": 28,
+                "color": "yellow"
+              },
+              {
+                "value": 35,
+                "color": "red"
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        }
+      }
+    },
+    {
+      "id": 3,
+      "type": "gauge",
+      "title": "Inside CO2",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 10,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"sensor/inside_co2\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ppm",
+          "min": 400,
+          "max": 3000,
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "green"
+              },
+              {
+                "value": 1200,
+                "color": "yellow"
+              },
+              {
+                "value": 1700,
+                "color": "orange"
+              },
+              {
+                "value": 2000,
+                "color": "red"
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        }
+      }
+    },
+    {
+      "id": 4,
+      "type": "gauge",
+      "title": "Zone 1 Lux",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 15,
+        "y": 0,
+        "w": 5,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"sensor/lux_zone1\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "lux",
+          "min": 0,
+          "max": 1000,
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "red"
+              },
+              {
+                "value": 300,
+                "color": "yellow"
+              },
+              {
+                "value": 400,
+                "color": "green"
+              },
+              {
+                "value": 700,
+                "color": "yellow"
+              },
+              {
+                "value": 900,
+                "color": "red"
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        }
+      }
+    },
+    {
+      "id": 5,
+      "type": "gauge",
+      "title": "Zone 2 LUX",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 20,
+        "y": 0,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"sensor/lux_zone2\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "lux",
+          "min": 0,
+          "max": 1000,
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "red"
+              },
+              {
+                "value": 300,
+                "color": "yellow"
+              },
+              {
+                "value": 400,
+                "color": "green"
+              },
+              {
+                "value": 700,
+                "color": "yellow"
+              },
+              {
+                "value": 900,
+                "color": "red"
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        }
+      }
+    },
+    {
+      "id": 6,
+      "type": "gauge",
+      "title": "Thermal KPI",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"kpi/thermal\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "red"
+              },
+              {
+                "value": 40,
+                "color": "yellow"
+              },
+              {
+                "value": 70,
+                "color": "green"
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        }
+      }
+    },
+    {
+      "id": 7,
+      "type": "gauge",
+      "title": "AIQ KPI",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 4,
+        "y": 8,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"kpi/iaq\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "red"
+              },
+              {
+                "value": 40,
+                "color": "yellow"
+              },
+              {
+                "value": 70,
+                "color": "green"
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "gauge",
+      "title": "Visual KPI",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 8,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: -5m)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"kpi/visual\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> last()"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "decimals": 1,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "value": null,
+                "color": "red"
+              },
+              {
+                "value": 40,
+                "color": "yellow"
+              },
+              {
+                "value": 70,
+                "color": "green"
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "reduceOptions": {
+          "values": false,
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": ""
+        }
+      }
+    },
+    {
+      "id": 9,
+      "type": "timeseries",
+      "title": "IAQ KPI",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"kpi/iaq\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "type": "timeseries",
+      "title": "Thermal KPI",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 8,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"kpi/thermal\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "type": "timeseries",
+      "title": "Visual KPI",
+      "datasource": {
+        "type": "influxdb",
+        "uid": "InfluxDB-WINECO"
+      },
+      "gridPos": {
+        "x": 20,
+        "y": 8,
+        "w": 4,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "InfluxDB-WINECO"
+          },
+          "query": "from(bucket: \"WINECO\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"all_iot_data\")\n  |> filter(fn: (r) => r.topic == \"kpi/visual\")\n  |> filter(fn: (r) => r._field == \"numeric_value\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 8,
+            "showPoints": "never",
+            "spanNulls": true
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "type": "volkovlabs-form-panel",
+      "title": "Window opening",
+      "datasource": null,
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 5,
+        "h": 6
+      },
+      "options": {
+        "layout": {
+          "variant": "single",
+          "padding": 10,
+          "orientation": "horizontal",
+          "sections": []
+        },
+        "buttonGroup": {
+          "size": "md",
+          "orientation": "center"
+        },
+        "saveDefault": {
+          "variant": "hidden",
+          "text": "Save Default",
+          "icon": "save"
+        },
+        "reset": {
+          "variant": "hidden",
+          "text": "Reset",
+          "icon": "process",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "submit": {
+          "variant": "primary",
+          "text": "Submit",
+          "icon": "upload",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "initial": {
+          "method": "NONE",
+          "url": "",
+          "code": "",
+          "contentType": "application/json"
+        },
+        "update": {
+          "method": "POST",
+          "url": "http://localhost:5000/publish",
+          "contentType": "application/json",
+          "confirm": false,
+          "payloadMode": "custom",
+          "getPayload": "const result = {};\nresult['piston_val'] = Number(elements.find(e => e.id === 'value').value);\nreturn result;"
+        },
+        "elements": [
+          {
+            "id": "value",
+            "title": "",
+            "type": "slider",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "value": 0,
+            "width": 0,
+            "section": "",
+            "tooltip": "",
+            "unit": "%",
+            "labelWidth": 0
+          }
+        ],
+        "resetAction": {
+          "mode": "initial",
+          "code": "",
+          "confirm": false
+        },
+        "sync": true
+      },
+      "pluginVersion": "5.0.0",
+      "transparent": false
+    },
+    {
+      "id": 13,
+      "type": "volkovlabs-form-panel",
+      "title": "Shading Position",
+      "datasource": null,
+      "gridPos": {
+        "x": 5,
+        "y": 16,
+        "w": 5,
+        "h": 6
+      },
+      "options": {
+        "layout": {
+          "variant": "single",
+          "padding": 10,
+          "orientation": "horizontal",
+          "sections": []
+        },
+        "buttonGroup": {
+          "size": "md",
+          "orientation": "center"
+        },
+        "saveDefault": {
+          "variant": "hidden",
+          "text": "Save Default",
+          "icon": "save"
+        },
+        "reset": {
+          "variant": "hidden",
+          "text": "Reset",
+          "icon": "process",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "submit": {
+          "variant": "primary",
+          "text": "Submit",
+          "icon": "upload",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "initial": {
+          "method": "NONE",
+          "url": "",
+          "code": "",
+          "contentType": "application/json"
+        },
+        "update": {
+          "method": "POST",
+          "url": "http://localhost:5000/publish",
+          "contentType": "application/json",
+          "confirm": false,
+          "payloadMode": "custom",
+          "getPayload": "const result = {};\nresult['shading_val'] = Number(elements.find(e => e.id === 'value').value);\nreturn result;"
+        },
+        "elements": [
+          {
+            "id": "value",
+            "title": "",
+            "type": "slider",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "value": 0,
+            "width": 0,
+            "section": "",
+            "tooltip": "",
+            "unit": "%",
+            "labelWidth": 0
+          }
+        ],
+        "resetAction": {
+          "mode": "initial",
+          "code": "",
+          "confirm": false
+        },
+        "sync": true
+      },
+      "pluginVersion": "5.0.0",
+      "transparent": false
+    },
+    {
+      "id": 14,
+      "type": "volkovlabs-form-panel",
+      "title": "Zone 1 LED",
+      "datasource": null,
+      "gridPos": {
+        "x": 10,
+        "y": 16,
+        "w": 5,
+        "h": 6
+      },
+      "options": {
+        "layout": {
+          "variant": "single",
+          "padding": 10,
+          "orientation": "horizontal",
+          "sections": []
+        },
+        "buttonGroup": {
+          "size": "md",
+          "orientation": "center"
+        },
+        "saveDefault": {
+          "variant": "hidden",
+          "text": "Save Default",
+          "icon": "save"
+        },
+        "reset": {
+          "variant": "hidden",
+          "text": "Reset",
+          "icon": "process",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "submit": {
+          "variant": "primary",
+          "text": "Submit",
+          "icon": "upload",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "initial": {
+          "method": "NONE",
+          "url": "",
+          "code": "",
+          "contentType": "application/json"
+        },
+        "update": {
+          "method": "POST",
+          "url": "http://localhost:5000/publish",
+          "contentType": "application/json",
+          "confirm": false,
+          "payloadMode": "custom",
+          "getPayload": "const result = {};\nresult['led1_val'] = Number(elements.find(e => e.id === 'value').value);\nreturn result;"
+        },
+        "elements": [
+          {
+            "id": "value",
+            "title": "",
+            "type": "slider",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "value": 0,
+            "width": 0,
+            "section": "",
+            "tooltip": "",
+            "unit": "%",
+            "labelWidth": 0
+          }
+        ],
+        "resetAction": {
+          "mode": "initial",
+          "code": "",
+          "confirm": false
+        },
+        "sync": true
+      },
+      "pluginVersion": "5.0.0",
+      "transparent": false
+    },
+    {
+      "id": 15,
+      "type": "volkovlabs-form-panel",
+      "title": "Zone 2 LED",
+      "datasource": null,
+      "gridPos": {
+        "x": 15,
+        "y": 16,
+        "w": 5,
+        "h": 6
+      },
+      "options": {
+        "layout": {
+          "variant": "single",
+          "padding": 10,
+          "orientation": "horizontal",
+          "sections": []
+        },
+        "buttonGroup": {
+          "size": "md",
+          "orientation": "center"
+        },
+        "saveDefault": {
+          "variant": "hidden",
+          "text": "Save Default",
+          "icon": "save"
+        },
+        "reset": {
+          "variant": "hidden",
+          "text": "Reset",
+          "icon": "process",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "submit": {
+          "variant": "primary",
+          "text": "Submit",
+          "icon": "upload",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "initial": {
+          "method": "NONE",
+          "url": "",
+          "code": "",
+          "contentType": "application/json"
+        },
+        "update": {
+          "method": "POST",
+          "url": "http://localhost:5000/publish",
+          "contentType": "application/json",
+          "confirm": false,
+          "payloadMode": "custom",
+          "getPayload": "const result = {};\nresult['led2_val'] = Number(elements.find(e => e.id === 'value').value);\nreturn result;"
+        },
+        "elements": [
+          {
+            "id": "value",
+            "title": "",
+            "type": "slider",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "value": 0,
+            "width": 0,
+            "section": "",
+            "tooltip": "",
+            "unit": "%",
+            "labelWidth": 0
+          }
+        ],
+        "resetAction": {
+          "mode": "initial",
+          "code": "",
+          "confirm": false
+        },
+        "sync": true
+      },
+      "pluginVersion": "5.0.0",
+      "transparent": false
+    },
+    {
+      "id": 16,
+      "type": "volkovlabs-form-panel",
+      "title": "Fan Speed",
+      "datasource": null,
+      "gridPos": {
+        "x": 20,
+        "y": 16,
+        "w": 4,
+        "h": 6
+      },
+      "options": {
+        "layout": {
+          "variant": "single",
+          "padding": 10,
+          "orientation": "horizontal",
+          "sections": []
+        },
+        "buttonGroup": {
+          "size": "md",
+          "orientation": "center"
+        },
+        "saveDefault": {
+          "variant": "hidden",
+          "text": "Save Default",
+          "icon": "save"
+        },
+        "reset": {
+          "variant": "hidden",
+          "text": "Reset",
+          "icon": "process",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "submit": {
+          "variant": "primary",
+          "text": "Submit",
+          "icon": "upload",
+          "backgroundColor": "purple",
+          "foregroundColor": "white"
+        },
+        "initial": {
+          "method": "NONE",
+          "url": "",
+          "code": "",
+          "contentType": "application/json"
+        },
+        "update": {
+          "method": "POST",
+          "url": "http://localhost:5000/publish",
+          "contentType": "application/json",
+          "confirm": false,
+          "payloadMode": "custom",
+          "getPayload": "const result = {};\nresult['fan_val'] = Number(elements.find(e => e.id === 'value').value);\nreturn result;"
+        },
+        "elements": [
+          {
+            "id": "value",
+            "title": "",
+            "type": "slider",
+            "min": 0,
+            "max": 100,
+            "step": 1,
+            "value": 0,
+            "width": 0,
+            "section": "",
+            "tooltip": "",
+            "unit": "%",
+            "labelWidth": 0
+          }
+        ],
+        "resetAction": {
+          "mode": "initial",
+          "code": "",
+          "confirm": false
+        },
+        "sync": true
+      },
+      "pluginVersion": "5.0.0",
+      "transparent": false
+    }
+  ],
+  "weekStart": ""
+}
