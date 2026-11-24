@@ -1,6 +1,6 @@
 # System architecture
 
-WINECO integrates indoor and outdoor sensing, environmental comfort evaluation, MQTT messaging, supervisory control and cloud monitoring. This document describes the academic team's implementation, including the containerized digital-twin source published here.
+WINECO integrates indoor and outdoor sensing, environmental comfort evaluation, MQTT messaging, supervisory control and cloud monitoring. This document describes the physical prototype and its containerized digital-twin implementation.
 
 ## Logical architecture
 
@@ -34,9 +34,9 @@ flowchart LR
 | MQTT | Publish/subscribe communication across nodes and application services |
 | Cloud/backend | Time-series logging in InfluxDB, Flask bridge, Grafana monitoring |
 
-The physical prototype used embedded hardware and actuators. The team repository also contains a Docker-based simulation environment; simulated devices must not be confused with the physical test hardware.
+The physical prototype used embedded hardware and actuators. The repository contains a Docker-based simulation environment; simulated devices must not be confused with the physical test hardware.
 
-## Deployment architecture in the team repository
+## Deployment architecture
 
 The Compose configuration defines a Mosquitto broker, two Python 3.11 simulated edge nodes, and a cloud container. It includes a broker health check, restart policies, persistent bind mounts and Grafana provisioning. Several application scripts still require manual startup. See [deployment notes](deployment.md).
 

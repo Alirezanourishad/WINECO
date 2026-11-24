@@ -10,7 +10,7 @@ An end-to-end IoT engineering project integrating environmental sensing, automat
 
 ## Overview
 
-WINECO was developed by a four-person team to investigate low-cost, adaptive indoor environmental control for smart buildings. The prototype monitors indoor and outdoor conditions, evaluates comfort indicators and coordinates window opening, shading, ventilation and LED lighting.
+WINECO is a low-cost, adaptive IoT system for indoor environmental control in smart buildings. The prototype monitors indoor and outdoor conditions, evaluates comfort indicators and coordinates window opening, shading, ventilation and LED lighting.
 
 The project focuses on three Indoor Environmental Quality (IEQ) domains:
 
@@ -45,7 +45,7 @@ flowchart TD
     F --> M
 ```
 
-See the [architecture documentation](docs/architecture.md) for the distinction between the physical prototype and the team's containerized simulation.
+See the [architecture documentation](docs/architecture.md) for details on the physical prototype and the containerized digital twin.
 
 ## Technology stack
 
@@ -113,27 +113,27 @@ Kick-off → System Requirements Review → Preliminary Design Review → Critic
 - [Deployment notes](docs/deployment.md)
 - [Experimental results and limitations](docs/experimental-results.md)
 
-## Project team
+## Academic project & contributors
 
 - Mohsen Marzban
 - Alireza Nourishad
 - Shabnam Amouie
 - Sajjad Rezaei Chermahini
 
+Developed as a collaborative academic project at Politecnico di Torino.
+
 Academic supervision: Prof. Fabio Dovis and Prof. Giacomo Chiesa.
 
-## Repository status and attribution
+## Deployment scope
 
-This independent portfolio repository documents a collaborative academic project. It is not a GitHub fork. The [original team repository](https://github.com/Marzban-io/WINECO) contains the team's implementation. Individual contributions are not itemized here because the available documentation reports team-level work.
+This repository provides the containerized digital twin, control logic, monitoring stack and deployment configuration for WINECO. It is designed for local simulation and experimentation.
 
-This standalone repository includes the team's containerized digital-twin implementation, republished with team permission, and portfolio-specific documentation and configuration changes. It preserves attribution to the original authors. The source snapshot is [35212b3](https://github.com/Marzban-io/WINECO/commit/35212b3dd715b2d79b1ae590c55b82356e8f76b6). No separate open-source license is asserted.
-
-Local database state, installed third-party plugins, raw operational logs and credentials are intentionally excluded. The Compose stack is intended for local simulation; physical Raspberry Pi hardware firmware is not provided by the upstream snapshot. End-to-end execution has not yet been independently verified.
+Credentials, raw operational logs, installed third-party plugins and generated database files are excluded from version control. The physical hardware firmware is not included. End-to-end execution of the current container configuration has not yet been verified.
 
 ## Future work
 
-- Secure configuration and reproducible container deployment.
-- Automated tests and continuous integration.
+- Further hardening and reproducible container deployment.
+- Expand automated tests and CI checks.
 - Improved sensor reliability and data-quality validation.
 - Longer real-building trials and quantified energy evaluation.
 - Enhanced edge autonomy and building management system integration.

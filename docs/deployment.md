@@ -1,6 +1,6 @@
 # Deployment notes
 
-These notes document the existing team simulation configuration for reference. This standalone portfolio includes a reviewed copy of the team's containerized simulation configuration. Runtime startup has not yet been independently tested.
+These notes describe how to configure and run the WINECO digital twin locally. Runtime startup has not yet been independently tested.
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ These notes document the existing team simulation configuration for reference. T
 - Fresh local credentials and a reviewed environment configuration.
 - An isolated development network.
 
-The team repository uses four Compose services: `inside-broker`, `inside-rasp`, `outside-rasp`, and `cloud-rasp`.
+WINECO uses four Compose services: `inside-broker`, `inside-rasp`, `outside-rasp`, and `cloud-rasp`.
 
 ## Startup sequence
 
@@ -21,7 +21,7 @@ docker compose ps
 docker compose logs --tail=100
 ```
 
-The original configuration requires the following Python processes to be started manually, in separate terminal sessions as appropriate:
+The current configuration requires the following Python processes to be started manually, in separate terminal sessions as appropriate:
 
 | Service | Scripts |
 | --- | --- |
@@ -49,8 +49,8 @@ The portfolio Compose file binds exposed ports to 127.0.0.1. MQTT is anonymous w
 - Keep real environment files and runtime databases out of version control.
 - Use unique credentials and avoid anonymous broker access outside isolated testing.
 - Review all source files, dashboards, logs and Git history before publishing.
-- Never copy original credentials into this repository.
+- Never commit credentials or authentication tokens.
 
 ## Reproducibility and limitations
 
-The source and deployment configuration have been inspected and migrated but the Docker stack has not been executed for this portfolio. Hardware-dependent tests require the original setup. Automated startup, pinned dependencies, CI tests and hardened container configuration are potential follow-up improvements, not completed features.
+The current Docker stack has not been tested end to end. Hardware-dependent tests require the physical prototype. The repository includes CI configuration for Python syntax, lint, shell syntax and Compose validation; runtime tests and further hardening remain future work.
